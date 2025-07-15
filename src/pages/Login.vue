@@ -1,8 +1,4 @@
 <template>
-  <div class="absolute top-4 left-6">
-    <img alt="Vue logo" class="logo" src="@/assets/logo.png" width="75" height="75" />
-  </div>
-
   <div class="min-h-screen mx-auto w-fit flex items-center justify-center relative">
     <div
       class="w-full p-8 bg-gradient-to-r from-[var(--color-amethyst-light)] to-[var(--color-amethyst-dark)] rounded-2xl"
@@ -125,7 +121,6 @@ const form = reactive({
 const showPassword = ref(false)
 
 const isValid = computed(() => form.user_id && form.password)
-
 const handleLogin = async () => {
   isLoading.value = true
   try {

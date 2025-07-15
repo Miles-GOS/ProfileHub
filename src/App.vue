@@ -1,6 +1,8 @@
+<!-- App.vue -->
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
 import BaseToast from '@/components/BaseToast.vue'
+import Header from '@/components/Header.vue'
 import { reactive, provide } from 'vue'
 
 const toast = reactive({
@@ -10,11 +12,15 @@ const toast = reactive({
 })
 
 provide('toast', toast)
+const route = useRoute()
 </script>
 
 <template>
   <div class="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed bg-main">
-    <RouterView />
+    <Header v-if="!route.meta.hideHeader" />
+    <div class="pt-16">
+      <RouterView />
+    </div>
     <BaseToast
       v-if="toast.show"
       :message="toast.message"

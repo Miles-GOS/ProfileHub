@@ -14,7 +14,7 @@
         <div class="flex-1 border-t border-2 border-white mx-4"></div>
         <button
           class="whitespace-nowrap cursor-pointer underline text-white font-bold px-4 py-2 text-md xs:text-xl md:text-2xl rounded transition"
-          @click="editMode = !editMode"
+          @click="toggleEditMode"
         >
           {{ editMode ? 'Go Back To My profile' : 'Edit Profile' }}
         </button>
@@ -52,7 +52,7 @@
             :editMode="editMode"
             :disabled="!isSectionValid('basic')"
             @submit="submitSection('basic')"
-            @cancel="editMode = false"
+            @cancel="toggleEditMode"
           />
         </div>
 
@@ -76,7 +76,7 @@
             :error="errors.postal_code"
           />
           <ProfileField
-            label="Date of Birth*"
+            label="Date of Birth"
             v-model="form.date_of_birth"
             :edit="editMode"
             type="date"
@@ -158,9 +158,13 @@ import axios from 'axios'
 import ProfileField from '@/components/ProfileField.vue'
 import ProfileActionButtons from '@/components/ProfileActionButtons.vue'
 import ProfileSideBar from '@/components/ProfileSideBar.vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const toast = inject('toast')
+const route = useRoute()
+const router = useRouter()
 const editMode = ref(false)
+
 const currentTab = ref('basic')
 const loading = ref(true)
 
@@ -198,11 +202,16 @@ const isSectionValid = (section) => {
   return required.every((field) => form.value[field]?.toString().trim())
 }
 
-const tabButtonClass = (tab) =>
-  [
-    'w-full text-left border-b-2 py-2 transition-colors duration-200',
-    currentTab.value === tab ? 'border-white font-bold' : 'border-white/30 hover:border-white/60',
-  ].join(' ')
+const toggleEditMode = () => {
+  editMode.value = !editMode.value
+
+  router.replace({
+    query: {
+      ...route.query,
+      edit: editMode.value ? 'true' : undefined,
+    },
+  })
+}
 
 const fieldMeta = {
   salutation: { label: 'Salutation', type: 'select' },
@@ -295,7 +304,6 @@ const submitSection = async (section) => {
     toast.type = 'success'
     toast.show = true
   } catch (error) {
-    console.error('Update failed:', error)
     toast.message = 'Failed to update section.'
     toast.type = 'error'
     toast.show = true
@@ -306,6 +314,7 @@ onMounted(async () => {
   try {
     const token = localStorage.getItem('token')
     if (!token) return
+    editMode.value = route.query.edit === 'true'
 
     const { data } = await axios.get(import.meta.env.VITE_API_BASE_URL + '/api/me', {
       headers: { Authorization: `Bearer ${token}` },

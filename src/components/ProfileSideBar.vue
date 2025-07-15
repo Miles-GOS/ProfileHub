@@ -1,5 +1,5 @@
 <template>
-  <aside class="w-full md:w-60 md:h-screen py-6 px-4 bg-white/5 backdrop-blur-lg flex-shrink-0">
+  <aside class="w-full md:w-60 md:h-screen py-6 px-4 backdrop-blur-lg flex-shrink-0">
     <ul
       class="flex md:block justify-around md:mt-30 overflow-auto pb-5 font-semibold text-lg md:text-xl space-x-4 md:space-x-0 md:space-y-4 px-2"
     >
@@ -22,9 +22,9 @@ const props = defineProps({
 const emit = defineEmits(['selectTab'])
 
 const tabs = computed(() => [
-  { key: 'basic', label: 'Basic Info' },
-  { key: 'additional', label: 'Additional Info' },
-  ...(props.maritalStatus === 'Married' ? [{ key: 'spouse', label: 'Spouse Detail' }] : []),
+  { key: 'basic', label: 'Basic Details' },
+  { key: 'additional', label: 'Additional Details' },
+  ...(props.maritalStatus === 'Married' ? [{ key: 'spouse', label: 'Spouse Details' }] : []),
   { key: 'preference', label: 'Personal Preferences' },
 ])
 
