@@ -16,9 +16,12 @@ const route = useRoute()
 </script>
 
 <template>
-  <div class="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed bg-main">
+  <div
+    class="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed bg-main xs:px-5 md:px-10 xl:px-20"
+  >
     <Header v-if="!route.meta.hideHeader" />
-    <div>
+
+    <div :class="[!route.meta.hideHeader ? 'pt-16' : '', 'min-h-screen']">
       <RouterView />
     </div>
     <BaseToast

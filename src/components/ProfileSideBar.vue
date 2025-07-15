@@ -1,10 +1,14 @@
 <template>
-  <aside class="w-full md:w-60 md:h-screen py-6 px-4 backdrop-blur-lg flex-shrink-0">
+  <aside class="w-full md:w-60 md:h-screen py-6 backdrop-blur-lg flex-shrink-0">
     <ul
-      class="flex md:block justify-around md:mt-30 overflow-auto pb-5 font-semibold text-lg md:text-xl space-x-4 md:space-x-0 md:space-y-4 px-2"
+      class="flex md:block justify-around md:mt-30 overflow-auto pb-5 font-semibold text-lg md:text-xl space-x-4 md:space-x-0 md:space-y-4"
     >
       <li v-for="tab in tabs" :key="tab.key" class="whitespace-nowrap flex-shrink-0">
-        <button @click="$emit('selectTab', tab.key)" :class="tabButtonClass(tab.key)">
+        <button
+          @click="$emit('selectTab', tab.key)"
+          :class="tabButtonClass(tab.key)"
+          class="cursor-pointer"
+        >
           {{ tab.label }}
         </button>
       </li>

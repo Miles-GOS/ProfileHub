@@ -8,9 +8,11 @@
       />
     </template>
 
-    <main class="flex-1 overflow-y-auto p-5 xs:p-10 xl:p-20">
+    <main class="flex-1 overflow-y-auto p-5 xs:p-10 xl:p-20 xs:pr-10 md:!pr-0">
       <div class="flex items-center text-xl xs:text-2xl md:text-4xl">
-        <div class="whitespace-nowrap">My <span class="font-bold">Profile</span></div>
+        <div class="whitespace-nowrap">
+          {{ editMode ? 'Edit' : 'My' }} <span class="font-bold">Profile</span>
+        </div>
         <div class="flex-1 border-t border-2 border-white mx-4"></div>
         <button
           class="whitespace-nowrap cursor-pointer underline text-white font-bold px-4 py-2 text-md xs:text-xl md:text-2xl rounded transition"
