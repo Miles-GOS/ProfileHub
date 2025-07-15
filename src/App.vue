@@ -18,7 +18,7 @@ const route = useRoute()
 <template>
   <div class="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed bg-main">
     <Header v-if="!route.meta.hideHeader" />
-    <div class="pt-16">
+    <div>
       <RouterView />
     </div>
     <BaseToast

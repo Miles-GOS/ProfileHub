@@ -1,6 +1,6 @@
 <template>
   <div class="absolute top-4 left-6">
-    <img alt="Vue logo" class="logo" src="@/assets/logo.png" width="75" height="75" />
+    <img alt="Vue logo" class="logo" src="@/assets/logo.png" width="50" height="50" />
   </div>
 
   <div class="min-h-screen mx-auto w-fit flex items-center justify-center relative">
@@ -8,7 +8,7 @@
       class="w-full p-8 bg-gradient-to-r from-[var(--color-amethyst-light)] to-[var(--color-amethyst-dark)] rounded-2xl"
     >
       <h2 class="text-4xl font-normal text-center text-white mb-5">
-        Welcome to <span class="font-bold">ProfileHub</span>
+        Welcome to <span class="font-bold">Profile Hub</span>
       </h2>
 
       <hr class="border-t border-white/50 mb-5 mx-20" />
