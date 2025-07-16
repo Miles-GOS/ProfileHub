@@ -24,12 +24,17 @@
 
       <section class="mx-auto space-y-6 mt-10">
         <div v-if="currentTab === 'basic'" class="space-y-4 relative">
-          <ProfileField label="" v-model="form.avatar" :edit="editMode" type="avatar" />
+          <ProfileField
+            label=""
+            v-model="form.avatar"
+            :edit="editMode && !isSubmitting"
+            type="avatar"
+          />
 
           <ProfileField
             label="Salutation*"
             v-model="form.salutation"
-            :edit="editMode"
+            :edit="editMode && !isSubmitting"
             type="select"
             :options="['Mr.', 'Ms.', 'Mrs.']"
             :error="errors.salutation"
@@ -37,24 +42,25 @@
           <ProfileField
             label="First Name*"
             v-model="form.firstName"
-            :edit="editMode"
+            :edit="editMode && !isSubmitting"
             :error="errors.firstName"
           />
           <ProfileField
             label="Last Name*"
             v-model="form.lastName"
-            :edit="editMode"
+            :edit="editMode && !isSubmitting"
             :error="errors.lastName"
           />
           <ProfileField
             label="Email Address*"
             v-model="form.email"
-            :edit="editMode"
+            :edit="editMode && !isSubmitting"
             :error="errors.email"
           />
           <ProfileActionButtons
             :editMode="editMode"
-            :disabled="!isSectionValid('basic')"
+            :disabled="!isSectionValid('basic') || isSubmitting"
+            :loading="isSubmitting"
             @submit="submitSection('basic')"
             @cancel="toggleEditMode"
           />
@@ -64,45 +70,46 @@
           <ProfileField
             label="Home Address*"
             v-model="form.homeAddress"
-            :edit="editMode"
+            :edit="editMode && !isSubmitting"
             :error="errors.homeAddress"
           />
           <ProfileField
             label="Country*"
             v-model="form.country"
-            :edit="editMode"
+            :edit="editMode && !isSubmitting"
             :error="errors.country"
           />
           <ProfileField
             label="Postal Code*"
             v-model="form.postalCode"
-            :edit="editMode"
+            :edit="editMode && !isSubmitting"
             :error="errors.postalCode"
           />
           <ProfileField
             label="Date of Birth"
             v-model="form.dateOfBirth"
-            :edit="editMode"
+            :edit="editMode && !isSubmitting"
             type="date"
             :error="errors.dateOfBirth"
           />
           <ProfileField
             label="Gender"
             v-model="form.gender"
-            :edit="editMode"
+            :edit="editMode && !isSubmitting"
             type="select"
             :options="['Male', 'Female']"
           />
           <ProfileField
             label="Marital Status"
             v-model="form.maritalStatus"
-            :edit="editMode"
+            :edit="editMode && !isSubmitting"
             type="select"
             :options="['Single', 'Married']"
           />
           <ProfileActionButtons
             :editMode="editMode"
-            :disabled="!isSectionValid('additional')"
+            :disabled="!isSectionValid('additional') || isSubmitting"
+            :loading="isSubmitting"
             @submit="submitSection('additional')"
             @cancel="editMode = false"
           />
@@ -116,37 +123,55 @@
           <ProfileField
             label="Salutation"
             v-model="form.spouseSalutation"
-            :edit="editMode"
+            :edit="editMode && !isSubmitting"
             type="select"
             :options="['Mr.', 'Ms.', 'Mrs.']"
             :error="errors.spouseSalutation"
           />
-          <ProfileField label="First Name" v-model="form.spouseFirstName" :edit="editMode" />
-          <ProfileField label="Last Name" v-model="form.spouseLastName" :edit="editMode" />
+          <ProfileField
+            label="First Name"
+            v-model="form.spouseFirstName"
+            :edit="editMode && !isSubmitting"
+          />
+          <ProfileField
+            label="Last Name"
+            v-model="form.spouseLastName"
+            :edit="editMode && !isSubmitting"
+          />
           <ProfileActionButtons
             :editMode="editMode"
-            :disabled="!isSectionValid('spouse')"
+            :disabled="!isSectionValid('spouse') || isSubmitting"
+            :loading="isSubmitting"
             @submit="submitSection('spouse')"
             @cancel="editMode = false"
           />
         </div>
 
         <div v-else-if="currentTab === 'preference'" class="space-y-4">
-          <ProfileField label="Hobbies & Interests" v-model="form.hobbies" :edit="editMode" />
-          <ProfileField label="Favorite Sports" v-model="form.favoriteSports" :edit="editMode" />
+          <ProfileField
+            label="Hobbies & Interests"
+            v-model="form.hobbies"
+            :edit="editMode && !isSubmitting"
+          />
+          <ProfileField
+            label="Favorite Sports"
+            v-model="form.favoriteSports"
+            :edit="editMode && !isSubmitting"
+          />
           <ProfileField
             label="Preferred Music Genre(s)"
             v-model="form.preferredMusicGenres"
-            :edit="editMode"
+            :edit="editMode && !isSubmitting"
           />
           <ProfileField
             label="Preferred Movie/TV Show(s)"
             v-model="form.preferredMoviesTv"
-            :edit="editMode"
+            :edit="editMode && !isSubmitting"
           />
           <ProfileActionButtons
             :editMode="editMode"
-            :disabled="!isSectionValid('preference')"
+            :disabled="!isSectionValid('preference') || isSubmitting"
+            :loading="isSubmitting"
             @submit="submitSection('preference')"
             @cancel="editMode = false"
           />
@@ -193,7 +218,7 @@ const editMode = ref(false)
 
 const currentTab = ref('basic')
 const loading = ref(true)
-const isLoading = ref(false)
+const isSubmitting = ref(false)
 
 const form = ref({
   salutation: '',
@@ -266,7 +291,7 @@ const submitSection = async (section) => {
   if (!token) return alert('No token found.')
 
   let payload = {}
-
+  isSubmitting.value = true
   if (section === 'basic') {
     const required = ['salutation', 'firstName', 'lastName', 'email']
     required.forEach((field) => {
@@ -277,7 +302,10 @@ const submitSection = async (section) => {
       errors.value.email = 'Email format is invalid'
     }
 
-    if (Object.keys(errors.value).length) return
+    if (Object.keys(errors.value).length) {
+      isSubmitting.value = false
+      return
+    }
 
     payload = {
       salutation: form.value.salutation,
@@ -341,6 +369,8 @@ const submitSection = async (section) => {
     toast.message = 'Failed to update section.'
     toast.type = 'error'
     toast.show = true
+  } finally {
+    isSubmitting.value = false
   }
 }
 
