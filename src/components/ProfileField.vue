@@ -83,7 +83,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import defaultAvatar from '@/assets/images/default-avatar.png'
-
+import '@/assets/css/ProfileField.css'
 const props = defineProps({
   label: String,
   modelValue: [String, File],

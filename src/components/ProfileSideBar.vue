@@ -4,12 +4,13 @@
       class="flex md:block justify-around md:mt-30 overflow-auto pb-5 font-semibold text-lg md:text-xl space-x-4 md:space-x-0 md:space-y-4"
     >
       <li v-for="tab in tabs" :key="tab.key" class="whitespace-nowrap flex-shrink-0">
-        <button
-          @click="$emit('selectTab', tab.key)"
-          :class="tabButtonClass(tab.key)"
-          class="cursor-pointer"
-        >
-          {{ tab.label }}
+        <button @click="$emit('selectTab', tab.key)" :class="tabButtonClass(tab.key)">
+          <span
+            class="relative after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-[2px] after:bg-white after:transition-all after:duration-300 group-hover:after:w-full"
+            :class="props.currentTab === tab.key ? 'after:w-full' : ''"
+          >
+            {{ tab.label }}
+          </span>
         </button>
       </li>
     </ul>
@@ -34,7 +35,7 @@ const tabs = computed(() => [
 
 const tabButtonClass = (tab) =>
   [
-    'w-full text-left border-b-2 py-2 transition-colors duration-200',
-    props.currentTab === tab ? 'border-white font-bold' : 'border-white/30 hover:border-white/60',
+    'relative w-full cursor-pointer text-left py-2 transition-colors duration-200 group',
+    props.currentTab === tab ? 'font-bold text-white' : 'text-white/70 hover:text-white',
   ].join(' ')
 </script>
