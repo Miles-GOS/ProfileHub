@@ -70,7 +70,7 @@
               v-model="form.confirmPassword"
               autocomplete="off"
               :type="showConfirmPassword ? 'text' : 'password'"
-              placeholder="Enter your password"
+              placeholder="Confirm your password"
               class="w-full px-4 py-2 bg-white/10 text-white placeholder-gray-300 rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[var(--color-amethyst-light)] hover:bg-white/20 hover:ring-1 hover:ring-[var(--color-amethyst-light)] transition-all duration-300 ease-in-out"
               required
             />
