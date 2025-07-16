@@ -30,6 +30,10 @@ const route = useRoute()
       :type="toast.type"
       @close="toast.show = false"
     />
+
+    <footer class="text-center text-white/60 py-6 text-sm border-t border-white/10">
+      &copy; 2025 ProfileHub. All rights reserved.
+    </footer>
   </div>
 </template>
 

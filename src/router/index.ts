@@ -3,6 +3,7 @@ import Login from '@/pages/Login.vue'
 import Profile from '@/pages/Profile.vue'
 import Register from '@/pages/Register.vue'
 import Cookies from 'js-cookie'
+import Home from '@/pages/Home.vue'
 
 const routes = [
   {
@@ -26,7 +27,7 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: Profile,
+    component: Home,
     meta: { public: false },
   },
 
