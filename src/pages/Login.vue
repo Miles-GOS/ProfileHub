@@ -131,6 +131,8 @@ useHead({
   ],
 })
 
+const ONE_YEAR_DAYS = 365
+
 const api = import.meta.env.VITE_API_BASE_URL
 
 const toast = inject('toast')
@@ -158,7 +160,7 @@ const handleLogin = async () => {
     const token = data.accessToken
 
     Cookies.set('token', token, {
-      expires: form.remember ? 365 : null,
+      expires: form.remember ? ONE_YEAR_DAYS : null,
       secure: true,
       sameSite: 'Strict',
     })

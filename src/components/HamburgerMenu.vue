@@ -23,8 +23,10 @@
         v-if="isOpen"
         class="absolute right-0 mt-2 w-48 backdrop-blur-xl rounded-lg shadow-lg py-2 z-50"
       >
-        <a href="/" class="block !text-white hover:!text-purple-600 font-medium !px-6 py-2">Home</a>
         <a href="/home" class="block !text-white hover:!text-purple-600 font-medium !px-6 py-2"
+          >Home</a
+        >
+        <a href="/profile" class="block !text-white hover:!text-purple-600 font-medium !px-6 py-2"
           >My Profile</a
         >
         <a
