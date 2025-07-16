@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/pages/Login.vue'
 import Profile from '@/pages/Profile.vue'
 import Register from '@/pages/Register.vue'
+import Cookies from 'js-cookie'
 
 const routes = [
   {
@@ -38,7 +39,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
+  const token = Cookies.get('token')
   const isLoggedIn = !!token
 
   if (!to.meta.public && !isLoggedIn) {

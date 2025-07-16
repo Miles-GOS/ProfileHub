@@ -1,12 +1,12 @@
 <template>
   <div class="min-h-screen flex flex-col md:flex-row text-white">
-    <template v-if="!loading">
+    <div>
       <ProfileSideBar
         :currentTab="currentTab"
-        :maritalStatus="form.marital_status"
+        :maritalStatus="form.maritalStatus"
         @selectTab="(tab) => (currentTab = tab)"
       />
-    </template>
+    </div>
 
     <main class="flex-1 overflow-y-auto p-5 xs:p-10 xl:p-20 xs:pr-10 md:!pr-0">
       <div class="flex items-center text-xl xs:text-2xl md:text-4xl">
@@ -36,15 +36,15 @@
           />
           <ProfileField
             label="First Name*"
-            v-model="form.first_name"
+            v-model="form.firstName"
             :edit="editMode"
-            :error="errors.first_name"
+            :error="errors.firstName"
           />
           <ProfileField
             label="Last Name*"
-            v-model="form.last_name"
+            v-model="form.lastName"
             :edit="editMode"
-            :error="errors.last_name"
+            :error="errors.lastName"
           />
           <ProfileField
             label="Email Address*"
@@ -63,9 +63,9 @@
         <div v-else-if="currentTab === 'additional'" class="space-y-4">
           <ProfileField
             label="Home Address*"
-            v-model="form.home_address"
+            v-model="form.homeAddress"
             :edit="editMode"
-            :error="errors.home_address"
+            :error="errors.homeAddress"
           />
           <ProfileField
             label="Country*"
@@ -75,16 +75,16 @@
           />
           <ProfileField
             label="Postal Code*"
-            v-model="form.postal_code"
+            v-model="form.postalCode"
             :edit="editMode"
-            :error="errors.postal_code"
+            :error="errors.postalCode"
           />
           <ProfileField
             label="Date of Birth"
-            v-model="form.date_of_birth"
+            v-model="form.dateOfBirth"
             :edit="editMode"
             type="date"
-            :error="errors.date_of_birth"
+            :error="errors.dateOfBirth"
           />
           <ProfileField
             label="Gender"
@@ -95,7 +95,7 @@
           />
           <ProfileField
             label="Marital Status"
-            v-model="form.marital_status"
+            v-model="form.maritalStatus"
             :edit="editMode"
             type="select"
             :options="['Single', 'Married']"
@@ -110,19 +110,19 @@
 
         <div
           v-else-if="currentTab === 'spouse'"
-          v-if="form.marital_status === 'Married'"
+          v-if="form.maritalStatus === 'Married'"
           class="space-y-4"
         >
           <ProfileField
             label="Salutation"
-            v-model="form.spouse_salutation"
+            v-model="form.spouseSalutation"
             :edit="editMode"
             type="select"
             :options="['Mr.', 'Ms.', 'Mrs.']"
-            :error="errors.spouse_salutation"
+            :error="errors.spouseSalutation"
           />
-          <ProfileField label="First Name" v-model="form.spouse_first_name" :edit="editMode" />
-          <ProfileField label="Last Name" v-model="form.spouse_last_name" :edit="editMode" />
+          <ProfileField label="First Name" v-model="form.spouseFirstName" :edit="editMode" />
+          <ProfileField label="Last Name" v-model="form.spouseLastName" :edit="editMode" />
           <ProfileActionButtons
             :editMode="editMode"
             :disabled="!isSectionValid('spouse')"
@@ -133,15 +133,15 @@
 
         <div v-else-if="currentTab === 'preference'" class="space-y-4">
           <ProfileField label="Hobbies & Interests" v-model="form.hobbies" :edit="editMode" />
-          <ProfileField label="Favorite Sports" v-model="form.favorite_sports" :edit="editMode" />
+          <ProfileField label="Favorite Sports" v-model="form.favoriteSports" :edit="editMode" />
           <ProfileField
             label="Preferred Music Genre(s)"
-            v-model="form.preferred_music_genres"
+            v-model="form.preferredMusicGenres"
             :edit="editMode"
           />
           <ProfileField
             label="Preferred Movie/TV Show(s)"
-            v-model="form.preferred_movies_tv"
+            v-model="form.preferredMoviesTv"
             :edit="editMode"
           />
           <ProfileActionButtons
@@ -158,11 +158,33 @@
 
 <script setup>
 import { ref, onMounted, inject } from 'vue'
-import axios from 'axios'
+
+import { useRoute, useRouter } from 'vue-router'
+import Cookies from 'js-cookie'
+import { useHead } from '@vueuse/head'
+
+import apiClient from '@/utils/axios'
 import ProfileField from '@/components/ProfileField.vue'
 import ProfileActionButtons from '@/components/ProfileActionButtons.vue'
 import ProfileSideBar from '@/components/ProfileSideBar.vue'
-import { useRoute, useRouter } from 'vue-router'
+
+useHead({
+  title: 'Profile | ProfileHub',
+  meta: [
+    {
+      name: 'description',
+      content: 'Check your profile on Profile Hub',
+    },
+    {
+      property: 'og:title',
+      content: 'Profile | ProfileHub',
+    },
+    {
+      property: 'og:image',
+      content: '/images/cover-profile.jpg',
+    },
+  ],
+})
 
 const toast = inject('toast')
 const route = useRoute()
@@ -171,34 +193,35 @@ const editMode = ref(false)
 
 const currentTab = ref('basic')
 const loading = ref(true)
+const isLoading = ref(false)
 
 const form = ref({
   salutation: '',
-  first_name: '',
-  last_name: '',
+  firstName: '',
+  lastName: '',
   avatar: '',
   email: '',
-  home_address: '',
+  homeAddress: '',
   country: '',
-  postal_code: '',
-  date_of_birth: '',
+  postalCode: '',
+  dateOfBirth: '',
   gender: '',
-  marital_status: '',
-  spouse_salutation: '',
-  spouse_first_name: '',
-  spouse_last_name: '',
+  maritalStatus: '',
+  spouseSalutation: '',
+  spouseFirstName: '',
+  spouseLastName: '',
   hobbies: '',
-  favorite_sports: '',
-  preferred_music_genres: '',
-  preferred_movies_tv: '',
+  favoriteSports: '',
+  preferredMusicGenres: '',
+  preferredMoviesTv: '',
 })
 
 const errors = ref({})
 
 const isSectionValid = (section) => {
   const requiredFields = {
-    basic: ['salutation', 'first_name', 'last_name', 'email'],
-    additional: ['home_address', 'country', 'postal_code', 'date_of_birth'],
+    basic: ['salutation', 'firstName', 'lastName', 'email'],
+    additional: ['homeAddress', 'country', 'postalCode', 'dateOfBirth'],
   }
 
   const required = requiredFields[section]
@@ -220,13 +243,13 @@ const toggleEditMode = () => {
 
 const fieldMeta = {
   salutation: { label: 'Salutation', type: 'select' },
-  first_name: { label: 'First Name', type: 'text' },
-  last_name: { label: 'Last Name', type: 'text' },
+  firstName: { label: 'First Name', type: 'text' },
+  lastName: { label: 'Last Name', type: 'text' },
   email: { label: 'Email Address', type: 'text' },
-  home_address: { label: 'Home Address', type: 'text' },
+  homeAddress: { label: 'Home Address', type: 'text' },
   country: { label: 'Country', type: 'select' },
-  postal_code: { label: 'Postal Code', type: 'text' },
-  date_of_birth: { label: 'Date of Birth', type: 'date' },
+  postalCode: { label: 'Postal Code', type: 'text' },
+  dateOfBirth: { label: 'Date of Birth', type: 'date' },
 }
 
 const getValidationMessage = (fieldKey) => {
@@ -239,71 +262,76 @@ const getValidationMessage = (fieldKey) => {
 
 const submitSection = async (section) => {
   errors.value = {}
-  const token = localStorage.getItem('token')
+  const token = Cookies.get('token')
   if (!token) return alert('No token found.')
 
   let payload = {}
 
   if (section === 'basic') {
-    const required = ['salutation', 'first_name', 'last_name', 'email']
+    const required = ['salutation', 'firstName', 'lastName', 'email']
     required.forEach((field) => {
       if (!form.value[field]) errors.value[field] = getValidationMessage(field)
     })
+
+    if (form.value.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.value.email)) {
+      errors.value.email = 'Email format is invalid'
+    }
+
     if (Object.keys(errors.value).length) return
 
     payload = {
       salutation: form.value.salutation,
-      first_name: form.value.first_name,
-      last_name: form.value.last_name,
+      firstName: form.value.firstName,
+      lastName: form.value.lastName,
       email: form.value.email,
       avatar: form.value.avatar,
     }
   } else if (section === 'additional') {
-    const required = ['home_address', 'country', 'postal_code', 'date_of_birth']
+    const required = ['homeAddress', 'country', 'postalCode', 'dateOfBirth']
     required.forEach((field) => {
       if (!form.value[field]) {
         errors.value[field] = getValidationMessage(field)
       }
     })
 
-    const dob = new Date(form.value.date_of_birth)
+    const dob = new Date(form.value.dateOfBirth)
     const ageDiff = new Date().getFullYear() - dob.getFullYear()
     const isBeforeBirthday =
       new Date().getMonth() < dob.getMonth() ||
       (new Date().getMonth() === dob.getMonth() && new Date().getDate() < dob.getDate())
 
     const actualAge = ageDiff - (isBeforeBirthday ? 1 : 0)
-    if (form.value.date_of_birth && actualAge < 17) {
-      errors.value.date_of_birth = 'You must be at least 17 years old.'
+    if (form.value.dateOfBirth && actualAge < 17) {
+      errors.value.dateOfBirth = 'You must be at least 17 years old.'
     }
 
     if (Object.keys(errors.value).length) return
 
     payload = {
-      home_address: form.value.home_address,
+      homeAddress: form.value.homeAddress,
       country: form.value.country,
-      postal_code: form.value.postal_code,
-      date_of_birth: form.value.date_of_birth,
+      postalCode: form.value.postalCode,
+      dateOfBirth: form.value.dateOfBirth,
       gender: form.value.gender,
-      marital_status: form.value.marital_status,
+      maritalStatus: form.value.maritalStatus,
     }
   } else if (section === 'spouse') {
     payload = {
-      spouse_salutation: form.value.spouse_salutation,
-      spouse_first_name: form.value.spouse_first_name,
-      spouse_last_name: form.value.spouse_last_name,
+      spouseSalutation: form.value.spouseSalutation,
+      spouseFirstName: form.value.spouseFirstName,
+      spouseLastName: form.value.spouseLastName,
     }
   } else if (section === 'preference') {
     payload = {
       hobbies: form.value.hobbies,
-      favorite_sports: form.value.favorite_sports,
-      preferred_music_genres: form.value.preferred_music_genres,
-      preferred_movies_tv: form.value.preferred_movies_tv,
+      favoriteSports: form.value.favoriteSports,
+      preferredMusicGenres: form.value.preferredMusicGenres,
+      preferredMoviesTv: form.value.preferredMoviesTv,
     }
   }
 
   try {
-    await axios.patch(import.meta.env.VITE_API_BASE_URL + '/api/me/update', payload, {
+    await apiClient.patch(import.meta.env.VITE_API_BASE_URL + '/api/me/update', payload, {
       headers: { Authorization: `Bearer ${token}` },
     })
     toast.message = 'Info updated successfully!'
@@ -318,17 +346,18 @@ const submitSection = async (section) => {
 
 onMounted(async () => {
   try {
-    const token = localStorage.getItem('token')
+    const token = Cookies.get('token')
     if (!token) return
     editMode.value = route.query.edit === 'true'
 
-    const { data } = await axios.get(import.meta.env.VITE_API_BASE_URL + '/api/me', {
+    const { data } = await apiClient.get(import.meta.env.VITE_API_BASE_URL + '/api/me', {
       headers: { Authorization: `Bearer ${token}` },
     })
 
     Object.assign(form.value, data.user)
   } catch (error) {
     console.error('Failed to fetch profile:', error)
+    Cookies.remove('token')
   } finally {
     loading.value = false
   }

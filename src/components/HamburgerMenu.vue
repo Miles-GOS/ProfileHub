@@ -41,28 +41,30 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios'
+import apiClient from '@/utils/axios'
 import { ref, onMounted } from 'vue'
+import Cookies from 'js-cookie'
 
 const isOpen = ref(false)
 const isLoggedIn = ref(false)
 
 onMounted(() => {
-  const token = localStorage.getItem('token')
+  const token = Cookies.get('token')
   isLoggedIn.value = !!token
 })
 
 const logout = async () => {
   try {
-    const token = localStorage.getItem('token')
-    await axios.post(
+    const token = Cookies.get('token')
+    await apiClient.post(
       import.meta.env.VITE_API_BASE_URL + '/api/logout',
       {},
       {
         headers: { Authorization: `Bearer ${token}` },
       },
     )
-    localStorage.removeItem('token')
+    Cookies.remove('token')
+
     isLoggedIn.value = false
     isOpen.value = false
     window.location.href = '/login'
