@@ -14,13 +14,13 @@
 
       <form @submit.prevent="handleLogin" class="flex flex-col !space-y-6" autocomplete="off">
         <div class="flex items-center gap-x-4">
-          <label for="user_id" class="w-1/3 text-sm font-medium text-gray-100">User ID*</label>
+          <label for="userId" class="w-1/3 text-sm font-medium text-gray-100">User ID*</label>
           <div
             class="w-2/3 p-[2px] rounded-xl bg-gradient-to-r from-[var(--color-amethyst-light)] to-[var(--color-amethyst-dark)]"
           >
             <input
-              id="user_id"
-              v-model="form.user_id"
+              id="userId"
+              v-model="form.userId"
               type="text"
               placeholder="Enter your ID"
               class="w-full px-4 py-2 bg-white/10 text-white placeholder-gray-300 rounded-[10px] focus:outline-none focus:ring-2 focus:ring-[var(--color-amethyst-light)] hover:bg-white/20 hover:ring-1 hover:ring-[var(--color-amethyst-light)] transition-all duration-300 ease-in-out"
@@ -105,10 +105,32 @@
 </template>
 
 <script setup>
-import { reactive, computed, ref } from 'vue'
+import { reactive, computed, ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
-import { inject } from 'vue'
+
+import Cookies from 'js-cookie'
+import { useHead } from '@vueuse/head'
+
+import apiClient from '@/utils/axios'
+
+useHead({
+  title: 'Login | ProfileHub',
+  meta: [
+    {
+      name: 'description',
+      content: 'Secure login to your Profile Hub dashboard',
+    },
+    {
+      property: 'og:title',
+      content: 'Login | ProfileHub',
+    },
+    {
+      property: 'og:image',
+      content: '/images/cover-login.jpg',
+    },
+  ],
+})
+
 const api = import.meta.env.VITE_API_BASE_URL
 
 const toast = inject('toast')
@@ -116,22 +138,31 @@ const router = useRouter()
 const isLoading = ref(false)
 
 const form = reactive({
-  user_id: '',
+  userId: '',
   password: '',
   remember: false,
 })
 
 const showPassword = ref(false)
 
-const isValid = computed(() => form.user_id && form.password)
+const isValid = computed(() => form.userId && form.password)
+
 const handleLogin = async () => {
   isLoading.value = true
   try {
-    const { data } = await axios.post(api + '/api/login', {
-      user_id: form.user_id,
+    const { data } = await apiClient.post(api + '/api/login', {
+      user_id: form.userId,
       password: form.password,
     })
-    localStorage.setItem('token', data.access_token)
+
+    const token = data.accessToken
+
+    Cookies.set('token', token, {
+      expires: form.remember ? 365 : null,
+      secure: true,
+      sameSite: 'Strict',
+    })
+
     router.push('/profile')
   } catch (error) {
     toast.message = 'Login failed. Please check your credentials.'

@@ -56,7 +56,6 @@
             </button>
           </div>
         </div>
-
         <div class="flex items-center gap-x-4">
           <label for="password" class="w-1/3 text-sm font-medium text-gray-100"
             >Confirm Password*
@@ -85,6 +84,26 @@
             </button>
           </div>
         </div>
+        <ul class="text-sm text-white flex flex-wrap gap-4 mt-2 font-medium max-w-xl">
+          <li :class="passwordRules.minLength ? 'text-green-400' : 'text-red-300'">
+            <span>{{ passwordRules.minLength ? '✅' : '❌' }} At least 10 characters</span>
+          </li>
+          <li :class="passwordRules.hasNumber ? 'text-green-400' : 'text-red-300'">
+            <span>{{ passwordRules.hasNumber ? '✅' : '❌' }} Contains at least one number</span>
+          </li>
+          <li :class="passwordRules.hasUppercase ? 'text-green-400' : 'text-red-300'">
+            <span
+              >{{ passwordRules.hasUppercase ? '✅' : '❌' }} Contains at least one uppercase
+              letter</span
+            >
+          </li>
+          <li :class="passwordRules.hasSpecialChar ? 'text-green-400' : 'text-red-300'">
+            <span
+              >{{ passwordRules.hasSpecialChar ? '✅' : '❌' }} Contains at least one special
+              character</span
+            >
+          </li>
+        </ul>
 
         <button
           type="submit"
@@ -124,10 +143,31 @@
   </div>
 </template>
 <script setup>
-import { reactive, computed, ref } from 'vue'
+import { reactive, computed, ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
-import { inject } from 'vue'
+
+import { useHead } from '@vueuse/head'
+
+import apiClient from '@/utils/axios'
+
+useHead({
+  title: 'Register | ProfileHub',
+  meta: [
+    {
+      name: 'description',
+      content: 'Register your account on Profile Hub',
+    },
+    {
+      property: 'og:title',
+      content: 'Register | ProfileHub',
+    },
+    {
+      property: 'og:image',
+      content: '/images/cover-register.jpg',
+    },
+  ],
+})
+
 const api = import.meta.env.VITE_API_BASE_URL
 
 const toast = inject('toast')
@@ -143,14 +183,23 @@ const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 const isLoading = ref(false)
 
+const passwordRules = computed(() => ({
+  minLength: form.password.length >= 10,
+  hasNumber: /[0-9]/.test(form.password),
+  hasUppercase: /[A-Z]/.test(form.password),
+  hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(form.password),
+}))
+
+const isPasswordValid = computed(() => Object.values(passwordRules.value).every(Boolean))
+
 const isValid = computed(() => {
-  return form.user_id && form.password && form.confirmPassword
+  return form.user_id && form.password && form.confirmPassword && isPasswordValid.value
 })
 
 const handleRegister = async () => {
   isLoading.value = true
   try {
-    const { data } = await axios.post(api + '/api/register', {
+    const { data } = await apiClient.post(api + '/api/register', {
       user_id: form.user_id,
       password: form.password,
       confirmPassword: form.confirmPassword,

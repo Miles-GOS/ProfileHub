@@ -10,7 +10,6 @@ A modern frontend web app with user authentication, dashboard view, and user flo
 - User dashboard to view and manage profile data
 - Responsive design with smooth UX
 - Integration-ready with backend APIs
-- Dockerized for easy deployment
 
 ---
 
@@ -52,7 +51,7 @@ yarn dev
 
 ## Deployment Notes
 
-- For production, set `VITE_API_BASE_URL` to your backend's public URL in Docker Compose or your deployment environment.
+- For production, set `VITE_API_BASE_URL` to your backend's public URL in your deployment environment.
 - Rebuild the frontend after changing environment variables.
 
 ---
