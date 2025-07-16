@@ -28,7 +28,7 @@ profilehub/
 
 ## 🧰 Prerequisites
 
-- **Node.js & npm** (for local frontend dev)
+- **Node.js & yarn** (for local frontend dev)
 
 ---
 
@@ -36,8 +36,8 @@ profilehub/
 
 ```bash
 cp .env.example .env
-yarn install
-yarn run dev
+yarn
+yarn dev
 ```
 
 - The frontend will run at http://localhost:3000
