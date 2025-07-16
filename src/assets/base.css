@@ -1,4 +1,6 @@
 /* color palette from <https://github.com/vuejs/theme> */
+@import 'tailwindcss';
+
 :root {
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
@@ -33,10 +35,17 @@
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
 
+  --color-amethyst-light: #994ecc;
+  --color-amethyst-dark: #3e187a;
+  --color-candy: #b58ecc;
+  --color-cyan: #5de6de;
+  --color-indigo-hover: #647dee;
+  --color-purple-hover: #7f53ac;
+
   --section-gap: 160px;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
     --color-background: var(--vt-c-black);
     --color-background-soft: var(--vt-c-black-soft);
@@ -48,14 +57,6 @@
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
   }
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
 }
 
 body {
