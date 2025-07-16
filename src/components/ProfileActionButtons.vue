@@ -3,7 +3,7 @@
     <button
       @click="$emit('submit')"
       :disabled="disabled"
-      class="w-fit bg-gradient-to-r mr-4 items-center font-bold justify-center flex from-[#B58ECC] to-[#5DE6DE] cursor-pointer text-white py-2 px-4 mb-3 rounded-xl hover:from-[#647DEE] hover:to-[#7F53AC] transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+      class="w-fit bg-gradient-to-r mr-4 items-center font-bold justify-center flex from-[var(--color-candy)] to-[var(--color-cyan)] cursor-pointer text-white py-2 px-4 mb-3 rounded-xl hover:from-[var(--color-indigo-hover)] hover:to-[var(--color-purple-hover)] transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
     >
       Save & Update
     </button>

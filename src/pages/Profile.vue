@@ -24,6 +24,8 @@
 
       <section class="mx-auto space-y-6 mt-10">
         <div v-if="currentTab === 'basic'" class="space-y-4 relative">
+          <ProfileField label="" v-model="form.avatar" :edit="editMode" type="avatar" />
+
           <ProfileField
             label="Salutation*"
             v-model="form.salutation"
@@ -174,6 +176,7 @@ const form = ref({
   salutation: '',
   first_name: '',
   last_name: '',
+  avatar: '',
   email: '',
   home_address: '',
   country: '',
@@ -253,6 +256,7 @@ const submitSection = async (section) => {
       first_name: form.value.first_name,
       last_name: form.value.last_name,
       email: form.value.email,
+      avatar: form.value.avatar,
     }
   } else if (section === 'additional') {
     const required = ['home_address', 'country', 'postal_code', 'date_of_birth']
