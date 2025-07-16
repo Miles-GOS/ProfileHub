@@ -147,6 +147,7 @@ import { reactive, computed, ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useHead } from '@vueuse/head'
+import Cookies from 'js-cookie'
 
 import apiClient from '@/utils/axios'
 
@@ -205,7 +206,7 @@ const handleRegister = async () => {
       confirmPassword: form.confirmPassword,
     })
 
-    localStorage.setItem('token', data.access_token)
+    Cookies.set('token', data.access_token)
     router.push('/profile')
     toast.message = 'Logged In.'
     toast.type = 'success'
