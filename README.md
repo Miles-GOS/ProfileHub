@@ -62,6 +62,21 @@ yarn dev
 
 ---
 
+
+## Test Account (after seeding)
+
+If you run the database seed command, a default test account will be created:
+
+```bash
+UserId:   michaels
+password: Jackson@123
+```
+
+You can use this account to log in and test the system.
+Alternatively, you can register a new account via the frontend if needed.
+
+---
+
 ## Screenshots
 
 ![Login](demo1.png)
