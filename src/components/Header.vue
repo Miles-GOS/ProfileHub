@@ -4,6 +4,7 @@
   >
     <div class="flex items-center space-x-2">
       <img src="@/assets/logo.png" alt="Logo" class="h-8 w-auto" />
+      <h1 class="text-2xl md:text-3xl font-bold tracking-wide">ProfileHub</h1>
     </div>
 
     <HamburgerMenu />
