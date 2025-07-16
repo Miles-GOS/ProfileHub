@@ -1,6 +1,6 @@
 # Profile Hub – User Login & Dashboard
 
-A modern frontend web app with user authentication, dashboard view, and user flow. Built using **React + TypeScript + Vite** and API-driven architecture.
+A modern frontend web app with user authentication, dashboard view, and user flow. Built using **Vue + TypeScript + Vite** and API-driven architecture.
 
 ---
 
@@ -54,6 +54,12 @@ yarn run dev
 
 - For production, set `VITE_API_BASE_URL` to your backend's public URL in Docker Compose or your deployment environment.
 - Rebuild the frontend after changing environment variables.
+
+---
+
+## Production URL
+
+`https://profile-hub-roan.vercel.app/`
 
 ---
 
